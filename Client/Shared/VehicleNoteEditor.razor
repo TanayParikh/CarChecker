@@ -1,6 +1,5 @@
 ﻿@inject IJSRuntime JS
 @inject IStringLocalizer<App> Localize
-@using BlazorInputFile 
 
 <Overlay @ref="overlay" OverlayStyle="Overlay.Style.FullScreen" CssClass="vehicle-note-editor-overlay" OnCloseRequested="Dismiss">
     <button class="overlay-close" @onclick="Dismiss">✖</button>
@@ -109,17 +108,18 @@
         }
     }
 
-    async Task HandlePhotoSelected(IFileListEntry[] files)
+    async Task HandlePhotoSelected(InputFileChangeEventArgs e)
     {
-        var sourceFile = files.FirstOrDefault();
-        if (sourceFile != null)
+        if (e.File != null)
         {
             // Convert to reasonably-sized JPEG
-            var imageFile = await sourceFile.ToImageFileAsync("image/jpeg", 800, 600);
+            var format = "image/jpeg";
+            var imageFile = await e.File.RequestImageFileAsync(format, 800, 600);
 
             // Represent it as a data URL we can display
-            var bytes = await imageFile.ReadAllAsync();
-            formData.PhotoUrl = bytes.ToDataUrl("image/jpeg");
+            var buffer = new byte[imageFile.Size];
+            await imageFile.OpenReadStream().ReadAsync(buffer);
+            formData.PhotoUrl = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
         }
     }
 }
