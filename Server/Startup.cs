@@ -33,6 +33,8 @@ namespace CarChecker.Server
                 options.UseSqlite(
                     Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddDatabaseDeveloperPageExceptionFilter();
+
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -58,7 +60,7 @@ namespace CarChecker.Server
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
+                app.UseMigrationsEndPoint();
                 app.UseWebAssemblyDebugging();
             }
             else
