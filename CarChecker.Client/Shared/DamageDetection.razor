@@ -1,0 +1,53 @@
+﻿@inject HttpClient Http
+@inject IStringLocalizer<App> Localize
+
+@if (!string.IsNullOrEmpty(Image))
+{
+    <button @onclick="PerformDamageDetection" class="text-button damage-detection" type="button">@Localize["Detect damage"]</button>
+
+    if (isDetectingDamage)
+    {
+        <div>@Localize["Detecting..."]</div>
+    }
+    else if (damageDetectionResult != null)
+    {
+        if (damageDetectionResult.IsDamaged)
+        {
+            <div class="damaged">
+                <strong>@Localize["Damaged!"]</strong>
+                (@Localize["Confidence:"] @((100 * damageDetectionResult.Score).ToString("0"))%)
+            </div>
+        }
+        else
+        {
+            <div class="not-damaged">
+                <strong>@Localize["OK - not damaged"]</strong>
+                (@Localize["Confidence:"] @((100 * damageDetectionResult.Score).ToString("0"))%)
+            </div>
+        }
+    }
+}
+
+@code {
+    bool isDetectingDamage;
+    DamageDetectionResult damageDetectionResult;
+
+    [Parameter] public string Image { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        isDetectingDamage = false;
+        damageDetectionResult = null;
+    }
+
+    async Task PerformDamageDetection()
+    {
+        isDetectingDamage = true;
+
+        var imageBytes = DataUrl.ToBytes(Image);
+        var response = await Http.PostAsync("api/detectdamage", new ByteArrayContent(imageBytes));
+        damageDetectionResult = await response.Content.ReadFromJsonAsync<DamageDetectionResult>();
+
+        isDetectingDamage = false;
+    }
+}
