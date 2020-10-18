@@ -1,4 +1,5 @@
 ﻿using System;
+using CarChecker.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.MobileBlazorBindings;
@@ -19,13 +20,11 @@ namespace CarChecker
                 {
                     // Adds web-specific services such as NavigationManager
                     services.AddBlazorHybrid();
-
-                    // Register app-specific services
-                    services.AddSingleton<CounterState>();
+                    services.AddCarCheckerComponents("https://localhost:44305/");
                 })
                 .Build();
 
-            MainPage = new ContentPage { Title = "My Application" };
+            MainPage = new ContentPage { Title = "CarChecker" };
             host.AddComponent<Main>(parent: MainPage);
         }
 

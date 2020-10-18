@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <RazorLangVersion>3.0</RazorLangVersion>
     <EnableDefaultCssItems>false</EnableDefaultCssItems>
@@ -25,4 +25,13 @@
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />
     <PackageReference Include="Xamarin.Forms" Version="4.7.0.968" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CarChecker.Components\CarChecker.Components.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="WebUI\wwwroot\_content\SceneViewer\" />
+  </ItemGroup>
+
 </Project>
