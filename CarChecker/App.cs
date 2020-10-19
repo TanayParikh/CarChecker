@@ -1,5 +1,6 @@
 ﻿using System;
 using CarChecker.Components;
+using CarChecker.Components.Data;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.MobileBlazorBindings;
@@ -21,6 +22,7 @@ namespace CarChecker
                     // Adds web-specific services such as NavigationManager
                     services.AddBlazorHybrid();
                     services.AddCarCheckerComponents("https://localhost:44305/");
+                    services.AddSingleton<IVehicleReportOpener, DesktopVehicleReportOpener>();
                 })
                 .Build();
 
